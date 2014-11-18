@@ -1,0 +1,20 @@
+<a href="/songs/new">Add a song!</a>
+
+<% @logged_in = current_user ? true : false %>
+<% @tracks = Track.all %>
+
+<% @tracks.sort! { |x,y| y.num_upvotes <=> x.num_upvotes } %>
+
+<% @tracks.each do |track| %>
+  <div class="track">
+    <h3><%= track.song_title %> (by: <%= track.author %>)</h3>
+    <h4>uploaded by: <%= track.user.username if !track.user.nil? %></h2>
+    <h1>Upvotes: <%= track.num_upvotes %></h1>
+    <a href="<%= track.url %>"><%= track.url %></a>
+    <% if @logged_in %>
+      <form method="post" action="/songs/upvote/<%= track.id %>">
+       <button type="submit">Upvote</button>
+      </form>
+    <% end %>
+  </div>
+<% end %>
